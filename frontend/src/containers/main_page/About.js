@@ -1,7 +1,4 @@
-import './App.css'
-import './style.css'
 import React from 'react'
-import {Navbar, Container, Nav, NavLink} from "react-bootstrap";
 
 const About = () => {
     return(

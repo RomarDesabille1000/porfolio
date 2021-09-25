@@ -5,3 +5,16 @@
 .newClass{
     height: 100%;
 }
+
+body{
+    background-color: #262626;
+    color: #dddd;
+}
+
+i, a, h1{
+    color: #11AA8A !important;
+}
+
+div{
+    color: #dddd !important;
+}

@@ -1,7 +1,4 @@
-import './App.css'
-import './style.css'
 import React from 'react'
-import {Navbar, Container, Nav, NavLink} from "react-bootstrap";
 
 const About = () => {
     return(
@@ -13,15 +10,15 @@ const About = () => {
 
             <p>Find me on
                 <a className="icon" href="https://github.com/Rumiare" aria-label="github">
-                    <i className="fab fa-github" aria-hidden="true"></i>
+                    <span> <i className="fab fa-github" aria-hidden="true"></i></span>
                 </a>
                 ,
                 <a className="icon" href="https://www.facebook.com/IiIiIili/" aria-label="facebook">
-                    <i className="fab fa-facebook" aria-hidden="true"></i>
+                    <span> <i className="fab fa-facebook" aria-hidden="true"></i></span>
                 </a>
-                and
+                <span> and</span>
                 <a className="icon" href="https://www.youtube.com/channel/UCpnP38Wt8nkec03lLwGSHIw" aria-label="youtube">
-                    <i className="fas fa-youtube" aria-hidden="true"></i>
+                    <span> <i className="fas fa-envelope" aria-hidden="true"></i></span>
                 </a>
                 .
             </p>
