@@ -22,6 +22,63 @@ const About = () => {
                 </a>
                 .
             </p>
+
+            <section id="projects">
+                <span className="h1">
+                    Featured Post
+                </span>
+                <ul className="post-list">
+                    <li className="post-item">
+                        <div className="meta">
+                            <time dateTime="2016-11-14T16:49:32.000Z" itemProp="datePublished">14 Nov 2016</time>
+                        </div>
+                        <span className="link">
+                            Hello World
+                        </span>
+                    </li>
+                    <li className="post-item">
+                        <div className="meta">
+                            <time dateTime="2016-11-14T16:49:32.000Z" itemProp="datePublished">14 Nov 2016</time>
+                        </div>
+                        <span className="link">
+                            test
+                        </span>
+                    </li>
+                </ul>
+            </section>
+            <section id="projects">
+                <span className="h1" style={{fontSize:19}}>
+                     Featured Projects
+                </span>
+                <div className="project-list-container">
+                    <ul className="project-list">
+                        <li className="project">
+                            <div className="image">
+                                <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
+                            </div>
+                            <div className="title">Hello world</div>
+                        </li>
+                        <li className="project">
+                            <div className="image">
+                                <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
+                            </div>
+                            <div className="title">Hello world</div>
+                        </li>
+                        <li className="project">
+                            <div className="image">
+                                <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
+                            </div>
+                            <div className="title">Hello world</div>
+                        </li>
+                        <li className="project">
+                            <div className="image">
+                                <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
+                            </div>
+                            <div className="title">Hello world</div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
         </div>
     )
 }

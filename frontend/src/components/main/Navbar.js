@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Switch, Route, NavLink} from 'react-router-dom'
+import {Switch, Route, NavLink} from 'react-router-dom'
 import About from "../../containers/main_page/About";
 import Blog from "../../containers/main_page/Blog";
 import Home from "../../containers/main_page/Home";

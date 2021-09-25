@@ -7,14 +7,14 @@
 }
 
 body{
-    background-color: #262626;
+    background-color: #1D1F21;
     color: #dddd;
 }
 
-i, a, h1{
+a, h1{
     color: #11AA8A !important;
 }
 
-div{
-    color: #dddd !important;
+div, i{
+    color: #C9CACC !important;
 }
