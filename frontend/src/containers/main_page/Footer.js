@@ -10,9 +10,9 @@ const About = () => {
                 <div className="footer-right">
                     <nav>
                         <ul>
-                            <li><a style={{cursor:"pointer"}} onClick={() => { history.push('/') }}>Home</a></li>
-                            <li><a style={{cursor:"pointer"}} onClick={() => { history.push('/blog') }}>Blog</a></li>
-                            <li><a style={{cursor:"pointer"}} onClick={() => { history.push('/about') }}>About</a></li>
+                            <li style={{cursor:"pointer"}} onClick={() => { history.push('/') }}>Home</li>
+                            <li style={{cursor:"pointer"}} onClick={() => { history.push('/blog') }}>Blog</li>
+                            <li style={{cursor:"pointer"}} onClick={() => { history.push('/about') }}>About</li>
                         </ul>
                     </nav>
                 </div>

@@ -3,7 +3,7 @@ import About from "../../containers/main_page/About";
 import Blog from "../../containers/main_page/Blog";
 import Home from "../../containers/main_page/Home";
 
-const Navbar = () => {
+const Navbar = ({ changeTheme, themeSelected }) => {
     return (
         <>
             <header id="header">
@@ -16,7 +16,7 @@ const Navbar = () => {
                 <div id="nav">
                     <ul>
                         <li className="icon">
-                            <a href="#" aria-label="Menu"><i className="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+                            <i className="fas fa-bars fa-2x" aria-hidden="true"></i>
                         </li>
                         <li><NavLink exact to="/" activeClassName="active">Home</NavLink></li>
                         <li><NavLink exact to="/blog" activeClassName="active">Blog</NavLink></li>
@@ -25,7 +25,7 @@ const Navbar = () => {
                 </div>
             </header>
             <Switch>
-                <Route exact path="/" component={Home}/>
+                <Route exact path="/" render={(props) => <Home {...props} changeTheme={changeTheme} themeSelected={themeSelected}/>}/>
                 <Route exact path="/about" component={About}/>
                 <Route exact path="/blog" component={Blog}/>
             </Switch>

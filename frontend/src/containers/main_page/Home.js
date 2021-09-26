@@ -1,12 +1,29 @@
-import React from 'react'
 
-const About = () => {
+const Home = ({ changeTheme, themeSelected }) => {
+
     return(
         <div>
-        Hello, I<span>&#39;</span>m a BSIT student of Holy Cross of Davao College. Welcome to my webpage, where you
-        can view about my me <span><i className="fab fa-github" /></span>. Feel free to browse on my website!
+            <div style={{marginBottom:10}}>
+                <span>
+                    <input type="radio"
+                           value="dark"
+                           checked={themeSelected === 'dark'}
+                           onChange={changeTheme}/> Dark Mode
+                </span>
+                &nbsp;
+                <span>
+                    <input
+                        type="radio"
+                        value="light"
+                        checked={themeSelected === 'light'}
+                        onChange={changeTheme}/> Light Mode
+                </span>
+            </div>
+            Hugo is a general-purpose website framework. Technically speaking, Hugo is a static site generator. Unlike systems that dynamically build a page with each visitor request, Hugo builds pages when you create or update your content. Since websites are viewed far more often than they are edited, Hugo is designed to provide an optimal viewing experience for your website’s end users and an ideal writing experience for website authors.
+            Hello, I<span>&#39;</span>m a BSIT student of Holy Cross of Davao College. Welcome to my webpage, where you
+            can view about my me <span><i className="fab fa-github" /></span>. Feel free to browse on my website!
 
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
 
             <p>Find me on
                 <a className="icon" href="https://github.com/Rumiare" aria-label="github">
@@ -50,38 +67,36 @@ const About = () => {
                 <span className="h1" style={{fontSize:19}}>
                      Featured Projects
                 </span>
-                <div className="project-list-container">
-                    <ul className="project-list">
-                        <li className="project">
-                            <div className="image">
-                                <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
-                            </div>
-                            <div className="title">Hello world</div>
-                        </li>
-                        <li className="project">
-                            <div className="image">
-                                <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
-                            </div>
-                            <div className="title">Hello world</div>
-                        </li>
-                        <li className="project">
-                            <div className="image">
-                                <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
-                            </div>
-                            <div className="title">Hello world</div>
-                        </li>
-                        <li className="project">
-                            <div className="image">
-                                <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
-                            </div>
-                            <div className="title">Hello world</div>
-                        </li>
-                    </ul>
-                </div>
+                <ul className="project-list">
+                    <li className="project">
+                        <div className="image">
+                            <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
+                        </div>
+                        <div className="title">Hello world</div>
+                    </li>
+                    <li className="project">
+                        <div className="image">
+                            <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
+                        </div>
+                        <div className="title">Hello world</div>
+                    </li>
+                    <li className="project">
+                        <div className="image">
+                            <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
+                        </div>
+                        <div className="title">Hello world</div>
+                    </li>
+                    <li className="project">
+                        <div className="image">
+                            <img src="https://www.takuzen.me/hugo-theme-cactus/images/logo.png" alt="ca"/>
+                        </div>
+                        <div className="title">Hello world</div>
+                    </li>
+                </ul>
             </section>
         </div>
     )
 }
 
 
-export default About
+export default Home

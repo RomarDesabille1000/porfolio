@@ -1,18 +1,33 @@
 import './App.css'
-import './style.css'
-import React from 'react'
 import Footer from './containers/main_page/Footer'
 import Navbar from './components/main/Navbar'
+import {ThemeProvider} from "styled-components";
+import {useState} from "react";
+import {lightTheme, darkTheme, GlobalStyles} from './components/Theme'
 
 function App() {
-  return (
-       <div className="max-width mx-auto px3 ltr newClass">
-            <div className="content index py4">
-                <Navbar/>
-                <Footer />
+    const [theme, setTheme] = useState({
+        current:'dark',
+        radioButton:'dark'
+    });
+
+    const onChangeThemeRadio = (e) => {
+        setTheme({
+            current: e.target.value, radioButton: e.target.value
+        })
+    }
+
+    return (
+        <ThemeProvider theme={theme.current === 'dark' ? darkTheme : lightTheme}>
+            <GlobalStyles/>
+            <div className="max-width mx-auto px3 ltr newClass">
+                <div className="content index py4">
+                    <Navbar changeTheme={onChangeThemeRadio} themeSelected={theme.radioButton} />
+                    <Footer />
+                </div>
             </div>
-       </div>
-  );
+        </ThemeProvider>
+    );
 }
 
 export default App;

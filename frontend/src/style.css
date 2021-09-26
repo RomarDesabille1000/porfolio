@@ -6,15 +6,14 @@
     height: 100%;
 }
 
-body{
-    background-color: #1D1F21;
-    color: #dddd;
-}
 
 a, h1{
     color: #11AA8A !important;
 }
 
-div, i{
-    color: #C9CACC !important;
+#footer li{
+    padding-right: 15px !important;
+}
+#footer li{
+    text-decoration: underline;
 }
