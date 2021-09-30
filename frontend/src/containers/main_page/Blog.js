@@ -1,12 +1,9 @@
+import Search from "../../components/Search";
+
 const Blog = () => {
     return(
-        <div>
-            <div className="search">
-                <div className="title">Hello World!</div>
-                <div>
-                    Search:&nbsp;<input type="text"/>
-                </div>
-            </div>
+        <div id="content">
+            <Search title="Hello World!"/>
             <div className="blog-post">
                 <div className="post-img">
                     <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" alt="name" />

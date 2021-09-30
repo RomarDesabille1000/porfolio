@@ -1,17 +1,21 @@
 import './App.css'
-import Footer from './containers/main_page/Footer'
-import Navbar from './components/main/Navbar'
+import Footer from './components/Footer'
+import Routes from './components/Routes'
 import {ThemeProvider} from "styled-components";
 import {useState} from "react";
 import {lightTheme, darkTheme, GlobalStyles} from './components/Theme'
 
 function App() {
     const [theme, setTheme] = useState({
-        current:'dark',
-        radioButton:'dark'
+        current: localStorage.getItem('theme') ? localStorage.getItem('theme') : 'dark',
+        radioButton: localStorage.getItem('theme') ? localStorage.getItem('theme') : 'dark'
     });
 
     const onChangeThemeRadio = (e) => {
+        if(e.target.value === 'dark')
+            localStorage.setItem('theme', 'dark')
+        else
+            localStorage.setItem('theme', 'light')
         setTheme({
             current: e.target.value, radioButton: e.target.value
         })
@@ -22,8 +26,9 @@ function App() {
             <GlobalStyles/>
             <div className="max-width mx-auto px3 ltr newClass">
                 <div className="content index py4">
-                    <Navbar changeTheme={onChangeThemeRadio} themeSelected={theme.radioButton} />
-                    <Footer />
+                    <Routes changeTheme={onChangeThemeRadio}
+                            themeSelected={theme.radioButton}/>
+                    <Footer/>
                 </div>
             </div>
         </ThemeProvider>

@@ -17,3 +17,15 @@ a, h1{
 #footer li{
     text-decoration: underline;
 }
+#header {
+    margin: 0 auto 0;
+    width: 100%;
+}
+
+#content{
+    margin-top: 2rem;
+}
+
+.ck-editor h1{
+    color:#000 !important;
+}

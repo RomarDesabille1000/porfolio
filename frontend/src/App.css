@@ -6,9 +6,10 @@
 }
 
 .search input{
-    background-color: #4b4b4b;
-    color: #11AA8A;
+    background-color: #232323;
+    color: #fff;
     outline: none;
+    border: 1px solid #11AA8A;
 }
 
 .search .title{
@@ -67,8 +68,108 @@
     cursor: pointer;
 }
 
-.post-list-option{
+
+.post-list-option {
     float: right;
     width: 100%;
     margin-bottom: 5px;
+}
+.draft-js-style{
+    border:1px solid #fff;
+    height:400px;
+}
+.rdw-editor-toolbar, .rdw-editor-toolbar a {
+    color: #000 !important;
+}
+
+.sub-menu{
+    padding: 5px 0 0 70px;
+}
+
+input[type=text]{
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: white;
+    outline: none;
+}
+input[type=text]:focus{
+    border: 1px solid #16AA8A;
+    color: white;
+}
+
+button{
+    color: #16AA8A;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border:1px solid #16AA8A;
+}
+
+.form{
+    padding-left:70px;
+    max-width: 100%;
+}
+.form .title{
+    font-size: 20px;
+}
+
+.form input{
+    width: 100%;
+}
+
+.form button{
+    float: right;
+    padding: 5px 40px;
+}
+
+button:hover{
+    color: #fff;
+    background-color: #16AA8A;
+}
+
+.form .post-checkbox{
+    display: flex;
+}
+
+.form .input{
+    margin-bottom: 20px;
+}
+
+.quill .ql-toolbar{
+    background-color: #fff;
+}
+
+.profile-img{
+    display: inline-block;
+    float: left;
+    margin-right: 20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #16AA8A;
+    padding: 10px;
+}
+
+.lists-admin{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #16AA8A;
+    padding: 20px 0;
+}
+
+.lists-admin .post-item, .lists-admin .post-list{
+    margin: 0
+}
+
+.input-error{
+    color: #ff1f1f
+}
+
+.input select{
+    width: 100%;
+    padding: 5px;
+    font-size: 16px;
+    font-family: unset;
 }

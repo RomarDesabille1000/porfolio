@@ -2,16 +2,16 @@
 const Home = ({ changeTheme, themeSelected }) => {
 
     return(
-        <div>
+        <div id="content">
             <div style={{marginBottom:10}}>
                 <span>
                     <input type="radio"
                            value="dark"
                            checked={themeSelected === 'dark'}
                            onChange={changeTheme}
-                           id="dark-mode"/>
+                           />
                            &nbsp;
-                           <label for="dark-mode">Dark Mode</label>
+                           <label>Dark Mode</label>
                 </span>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <span>
@@ -20,9 +20,9 @@ const Home = ({ changeTheme, themeSelected }) => {
                         value="light"
                         checked={themeSelected === 'light'}
                         onChange={changeTheme}
-                        id="light-mode"/>
+                        />
                         &nbsp;
-                        <label for="light-mode">Light Mode</label>
+                        <label>Light Mode</label>
                 </span>
             </div>
             Hugo is a general-purpose website framework. Technically speaking, Hugo is a static site generator. Unlike systems that dynamically build a page with each visitor request, Hugo builds pages when you create or update your content. Since websites are viewed far more often than they are edited, Hugo is designed to provide an optimal viewing experience for your website’s end users and an ideal writing experience for website authors.
@@ -33,15 +33,15 @@ const Home = ({ changeTheme, themeSelected }) => {
 
             <p>Find me on
                 <a className="icon" href="https://github.com/Rumiare" aria-label="github">
-                    <span> <i className="fab fa-github" aria-hidden="true"></i></span>
+                    <span> <i className="fab fa-github" aria-hidden="true"/></span>
                 </a>
                 ,
                 <a className="icon" href="https://www.facebook.com/IiIiIili/" aria-label="facebook">
-                    <span> <i className="fab fa-facebook" aria-hidden="true"></i></span>
+                    <span> <i className="fab fa-facebook" aria-hidden="true"/></span>
                 </a>
                 <span> and</span>
                 <a className="icon" href="https://www.youtube.com/channel/UCpnP38Wt8nkec03lLwGSHIw" aria-label="youtube">
-                    <span> <i className="fas fa-envelope" aria-hidden="true"></i></span>
+                    <span> <i className="fas fa-envelope" aria-hidden="true"/></span>
                 </a>
                 .
             </p>
