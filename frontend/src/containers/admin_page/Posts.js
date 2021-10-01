@@ -5,6 +5,9 @@ import Select from 'react-select'
 import Search from "../../components/Search";
 import {Field, Formik, useField} from "formik";
 import * as Yup from "yup";
+import {useDispatch, useSelector} from "react-redux";
+import {create_post, get_post} from "../../redux/modules/_post";
+import {useEffect} from "react";
 
 const SubMenu = () => (
     <div id="header" className="sub-menu">
@@ -20,44 +23,45 @@ const SubMenu = () => (
 
 //Post Lists
 export const Post = () => {
+    const state = useSelector(state => state.post)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(get_post())
+    }, [])
+
+    console.log(state)
+
     return(
         <div>
             <SubMenu/>
             <div id="content">
                 <Search title="Posts"/>
                 <section id="projects">
-                    <div className="lists-admin">
-                        <ul className="post-list">
-                            <li className="post-item">
-                                <div className="meta">
-                                    <time dateTime="2016-11-14T16:49:32.000Z" itemProp="datePublished">14 Nov 2016</time>
+                    {state.loading ? 'loading...': null}
+                    {state.error ? 'Somethings wrong': null}
+                    {
+                        state.data.map((data, index) => {
+                            return (
+                                <div key={index} className="lists-admin">
+                                    <ul className="post-list">
+                                        <li className="post-item">
+                                            <div className="meta">
+                                                <time dateTime={data.created_on} itemProp="datePublished">{data.created_on}</time>
+                                            </div>
+                                            <span className="link">
+                                                {data.title}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <button style={{marginRight:10}}>Update</button>
+                                        <button>Delete</button>
+                                    </div>
                                 </div>
-                                <span className="link">
-                                    Hello World
-                                </span>
-                            </li>
-                        </ul>
-                        <div>
-                            <button style={{marginRight:10}}>Update</button>
-                            <button>Delete</button>
-                        </div>
-                    </div>
-                    <div className="lists-admin">
-                        <ul className="post-list">
-                            <li className="post-item">
-                                <div className="meta">
-                                    <time dateTime="2016-11-14T16:49:32.000Z" itemProp="datePublished">14 Nov 2016</time>
-                                </div>
-                                <span className="link">
-                                    Hello World
-                                </span>
-                            </li>
-                        </ul>
-                        <div>
-                            <button style={{marginRight:10}}>Update</button>
-                            <button>Delete</button>
-                        </div>
-                    </div>
+                            )
+                        })
+                    }
                 </section>
             </div>
         </div>
@@ -77,17 +81,9 @@ export function MultipleSelectField(props) {
   return <Select {...props} value={state?.value} isMulti onChange={onChange} onBlur={setTouched} />;
 }
 
-function SelectField(FieldProps) {
-  return (
-    <Select
-      options={FieldProps.options}
-      {...FieldProps.field}
-      onChange={option => FieldProps.form.setFieldValue(FieldProps.field.name, option)}
-    />
-  )
-}
 //Create
 export const PostCreate = () => {
+
     //React Quill Modules
     const modules =  {
         toolbar: [
@@ -117,8 +113,22 @@ export const PostCreate = () => {
         is_featured_post: false,
     }
 
+    const state = useSelector(state => state.post)
+    const dispatch = useDispatch()
+
     const onSubmit = (values) => {
-        console.log(values.body)
+        let categorySelected = values.category.map(v => v.value)
+        console.log(values)
+        const f = new FormData()
+        f.append('title', values.title)
+        f.append('slug', values.slug)
+        f.append('body', values.body)
+        f.append('category_ids', categorySelected)
+        f.append('thumbnail', values.thumbnail, values.thumbnail.name)
+        f.append('status', values.status)
+        f.append('is_featured_project', values.is_featured_project)
+        f.append('is_featured_post', values.is_featured_post)
+        dispatch(create_post(f))
     }
 
     const validationSchema = Yup.object({
@@ -130,20 +140,20 @@ export const PostCreate = () => {
             .max(200, 'Maximum of 200 characters is only allowed.'),
         body: Yup.string()
             .required('Body is required.'),
-        category: Yup.array().min(1, 'Select at least 1 category.')
+        category: Yup.array().min(1, 'Select at least 1 category.'),
+        thumbnail: Yup.mixed().test('fileFormat', 'Unsupported file type', (value) => {
+            if(value !== undefined){
+                return (value.type === 'image/jpeg' || value.type === 'image/png')
+            }
+          }
+        )
     })
 
     const options = [
-      { value: '1', label: 'Chocolate' },
-      { value: '2', label: 'Strawberry' },
-      { value: '3', label: 'Vanilla' }
+      { value: '3', label: 'Chocolate' },
+      { value: '4', label: 'Strawberry' },
+      { value: '5', label: 'Vanilla' }
     ]
-
-    const statusOptions = [
-        {value:0, label:'Draft'},
-        {value:1, label:'Published'},
-    ]
-
 
     return(
         <div>
@@ -157,6 +167,8 @@ export const PostCreate = () => {
                         (p) => (
                             <form className="form" onSubmit={p.handleSubmit}>
                                 <div className="title">New Post</div>
+                                {state.loading ? <div>Loading...</div> : null}
+                                {state.success ? <div>Data has been successfully saved...</div> : null}
                                 <div className="input">
                                     Title
                                     <input type="text" name="title"
@@ -180,12 +192,12 @@ export const PostCreate = () => {
                                 <div className="input">
                                     Body
                                     <Field name="body">
-                                    {({ field }) =>
-                                        <ReactQuill value={field.value}
-                                                    modules={modules}
-                                                    onBlur={field.handleBlur}
-                                                    onChange={field.onChange(field.name)}/>
-                                    }
+                                        {({ field }) =>
+                                            <ReactQuill value={field.value}
+                                                        modules={modules}
+                                                        onBlur={field.handleBlur}
+                                                        onChange={field.onChange(field.name)}/>
+                                        }
                                     </Field>
                                     {p.touched.body && p.errors.body ?
                                         (<div className="input-error">{p.errors.body}</div>) : null}
@@ -203,7 +215,7 @@ export const PostCreate = () => {
                                     <div>Status</div>
                                     <Field as="select" name="status">
                                         <option value="0">Draft</option>
-                                         <option value="1">Status</option>
+                                        <option value="1">Status</option>
                                     </Field>
                                 </div>
                                 <div className="input">
@@ -211,7 +223,12 @@ export const PostCreate = () => {
                                     <input style={{border:'1px solid #fff'}}
                                            type="file"
                                            name="thumbnail"
+                                           onChange={(event) => {
+                                               p.setFieldValue("thumbnail", event.currentTarget.files[0]);
+                                           }}
                                     />
+                                    {p.errors.thumbnail ?
+                                        (<div className="input-error">{p.errors.thumbnail}</div>) : null}
                                 </div>
                                 <div className="post-checkbox input">
                                     <div style={{display:"flex",alignItems:"center",marginRight:15}}>
@@ -229,8 +246,17 @@ export const PostCreate = () => {
                                         />
                                     </div>
                                 </div>
+                                {
+                                    state.error ? <div className="input-error">Somethings wrong with your data.</div>
+                                        : null
+                                }
                                 <div>
-                                    <button type="submit" className="button">Confirm</button>
+                                    {state.loading ?
+                                        <button className="button" disabled>Loading....</button>
+                                        :
+                                        <button type="submit" className="button">
+                                            Confirm</button>
+                                    }
                                 </div>
                             </form>
                         )

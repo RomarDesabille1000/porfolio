@@ -1,0 +1,4 @@
+Django
+djangorestframework==3.12.4
+Pillow
+django-ckeditor==6.1.0
