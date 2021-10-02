@@ -11,5 +11,5 @@ urlpatterns = [
     path('testupload/create', testupload_create),
     # category
     path('category/lists/', category_list),
-    path('category/create', category_create),
+    path('category/create/', category_create),
 ]
