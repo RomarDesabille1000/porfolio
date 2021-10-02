@@ -129,6 +129,7 @@ export const PostCreate = () => {
         f.append('is_featured_project', values.is_featured_project)
         f.append('is_featured_post', values.is_featured_post)
         dispatch(create_post(f))
+        console.log(values)
     }
 
     const validationSchema = Yup.object({
