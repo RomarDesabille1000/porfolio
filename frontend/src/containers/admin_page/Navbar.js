@@ -1,6 +1,10 @@
-import {NavLink} from "react-router-dom";
+import {NavLink} from "react-bootstrap";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {userData} from "../../redux/modules/_auth";
 
-const AdminNavbarLayout = ({ children, userData }) => {
+const Navbar = () => {
+
     return (
         <>
             <header id="header">
@@ -10,8 +14,7 @@ const AdminNavbarLayout = ({ children, userData }) => {
                          alt="profile"
                     />
                     <div id="title">
-                        <h1>{userData.name}</h1>
-                        <p style={{margin:0}}>{userData.email}</p>
+                        <h1>s</h1>
                     </div>
                 </div>
                 <div id="nav">
@@ -19,16 +22,15 @@ const AdminNavbarLayout = ({ children, userData }) => {
                         <li className="icon">
                             <i className="fas fa-bars fa-2x" aria-hidden="true"/>
                         </li>
-                        <li><NavLink exact to="/admin/" activeClassName="active">Dashboard</NavLink></li>
+                        <li><NavLink exact to="/admin/dashboard" activeClassName="active">Dashboard</NavLink></li>
                         <li><NavLink exact to="/admin/category/" activeClassName="active">Category</NavLink></li>
                         <li><NavLink exact to="/admin/post/" activeClassName="active">Posts</NavLink></li>
                         <li><NavLink exact to="/admin/logout/" activeClassName="active">Logout</NavLink></li>
                     </ul>
                 </div>
             </header>
-            {children}
         </>
     );
 }
 
-export default AdminNavbarLayout
+export default Navbar

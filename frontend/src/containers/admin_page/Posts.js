@@ -6,8 +6,10 @@ import Search from "../../components/Search";
 import {Field, Formik, useField} from "formik";
 import * as Yup from "yup";
 import {useDispatch, useSelector} from "react-redux";
-import {create_post, get_post} from "../../redux/modules/_post";
-import {useEffect} from "react";
+import {createPost, getPost} from "../../redux/modules/_post";
+import {useEffect, useRef, useState} from "react";
+import {Pagination} from "../../components/Pagination";
+import Alert from "../../components/Alert";
 
 const SubMenu = () => (
     <div id="header" className="sub-menu">
@@ -20,17 +22,47 @@ const SubMenu = () => (
     </div>
 )
 
+//Multiple Select
+export function MultipleSelectField(props) {
+    const [field, state, { setValue, setTouched }] = useField(props.field.name);
+
+    // value is an array now
+    const onChange = (value) => {
+        setValue(value);
+    };
+
+    // use value to make this a  controlled component
+    // now when the form receives a value for 'campfeatures' it will populate as expected
+    return <Select {...props} value={state?.value} isMulti onChange={onChange} onBlur={setTouched} />;
+}
 
 //Post Lists
 export const Post = () => {
     const state = useSelector(state => state.post)
     const dispatch = useDispatch()
+    const [deletePost, setDeletePost] = useState({
+        id: null,
+        delete: false
+    })
+    const noOfPostToDisplay = 4
 
     useEffect(() => {
-        dispatch(get_post())
-    }, [])
+        dispatch(getPost(1, noOfPostToDisplay))
+    }, [dispatch])
 
-    console.log(state)
+    const formatDate = (date) => {
+        const d = date.split('-')
+        return `${d[2]}/${d[1]}/${d[0]}`
+    }
+
+    const backgroundColors = ['#CCE5FF', '#D4EDDA', '#E2E3E5', '#F8D7DA', '#FFF3CD', '#D1ECF1']
+
+    const handleOnClickDelete = (e) => {
+        setDeletePost({id: e.target.id, delete: true})
+    }
+    const handleOnClickCancel = (e) => {
+        setDeletePost({id: null, delete: false})
+    }
 
     return(
         <div>
@@ -38,48 +70,64 @@ export const Post = () => {
             <div id="content">
                 <Search title="Posts"/>
                 <section id="projects">
-                    {state.loading ? 'loading...': null}
-                    {state.error ? 'Somethings wrong': null}
+                    {state.loading ? <Alert type="info" message="Getting the data..."/> : null}
+                    {state.error ?
+                        <Alert type="error" message="Theres an error with the server please try to refresh your browser."/>
+                        : null}
                     {
-                        state.data.map((data, index) => {
+                        state.data.results.map((data, index) => {
                             return (
-                                <div key={index} className="lists-admin">
-                                    <ul className="post-list">
-                                        <li className="post-item">
-                                            <div className="meta">
-                                                <time dateTime={data.created_on} itemProp="datePublished">{data.created_on}</time>
-                                            </div>
+                                <div key={index}>
+                                    <div className="lists-admin">
+                                        <ul className="post-list">
+                                            <li key={index} className="post-item">
                                             <span className="link">
                                                 {data.title}
                                             </span>
-                                        </li>
-                                    </ul>
+                                                <span className="date">
+                                                &nbsp;Created: {formatDate(data.created_on)}
+                                            </span>
+                                            </li>
+                                            <span>Categories: </span>
+                                            {
+                                                data.category.map((c, i) => {
+                                                    return(
+                                                        <span key={i} className="post-category"
+                                                              style={{backgroundColor: backgroundColors[Math.floor(Math.random() * backgroundColors.length)]}}>{c.title}</span>
+                                                    )
+                                                })
+                                            }
+                                        </ul>
+                                        <div className="d-flex" style={{flexDirection:'column'}}>
+                                            <button className="confirm">Update</button>
+                                            <button id={data.id} onClick={handleOnClickDelete}
+                                                    style={{marginTop: 10}} className="cancel">
+                                                Delete</button>
+                                        </div>
+                                    </div>
                                     <div>
-                                        <button style={{marginRight:10}}>Update</button>
-                                        <button>Delete</button>
+                                        {
+                                            data.id === Number(deletePost.id) && deletePost.delete ?
+                                                <div className="d-flex" style={{justifyContent:'space-between'}}>
+                                                    <div>Are you sure You want to delete this post?</div>
+                                                    <div>
+                                                        <button className="confirm">Confirm</button>
+                                                        <button onClick={handleOnClickCancel} className="cancel">Cancel</button>
+                                                    </div>
+                                                </div> : null
+                                        }
                                     </div>
                                 </div>
                             )
                         })
                     }
+                    <Pagination data={state.data} dispatchFunction={getPost} pageItems={noOfPostToDisplay}/>
                 </section>
             </div>
         </div>
     )
 }
 
-export function MultipleSelectField(props) {
-  const [field, state, { setValue, setTouched }] = useField(props.field.name);
-
-  // value is an array now
-  const onChange = (value) => {
-      setValue(value);
-  };
-
- // use value to make this a  controlled component
- // now when the form receives a value for 'campfeatures' it will populate as expected
-  return <Select {...props} value={state?.value} isMulti onChange={onChange} onBlur={setTouched} />;
-}
 
 //Create
 export const PostCreate = () => {
@@ -107,7 +155,7 @@ export const PostCreate = () => {
         slug: '',
         body: '',
         category: [],
-        thumbnail: '',
+        thumbnail: null,
         status: 0,
         is_featured_project: false,
         is_featured_post: false,
@@ -115,21 +163,25 @@ export const PostCreate = () => {
 
     const state = useSelector(state => state.post)
     const dispatch = useDispatch()
+    const thumbnailInputRef = useRef()
 
-    const onSubmit = (values) => {
+    const onSubmit = (values, {setFieldValue, resetForm}) => {
         let categorySelected = values.category.map(v => v.value)
-        console.log(values)
         const f = new FormData()
         f.append('title', values.title)
         f.append('slug', values.slug)
         f.append('body', values.body)
         f.append('category_ids', categorySelected)
-        f.append('thumbnail', values.thumbnail, values.thumbnail.name)
+        if(values.thumbnail !== null){
+            f.append('thumbnail', values.thumbnail, values.thumbnail.name)
+        }
         f.append('status', values.status)
         f.append('is_featured_project', values.is_featured_project)
         f.append('is_featured_post', values.is_featured_post)
-        dispatch(create_post(f))
-        console.log(values)
+        dispatch(createPost(f))
+        //reset form inputs
+        thumbnailInputRef.current.value = null
+        resetForm()
     }
 
     const validationSchema = Yup.object({
@@ -142,12 +194,10 @@ export const PostCreate = () => {
         body: Yup.string()
             .required('Body is required.'),
         category: Yup.array().min(1, 'Select at least 1 category.'),
-        thumbnail: Yup.mixed().test('fileFormat', 'Unsupported file type', (value) => {
-            if(value !== undefined){
-                return (value.type === 'image/jpeg' || value.type === 'image/png')
-            }
-          }
-        )
+        thumbnail: Yup.mixed().nullable().notRequired().test('fileFormat', 'Unsupported file type.',(file) => {
+            const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png']
+            return (file === null || file === undefined || SUPPORTED_FORMATS.includes(file.type))
+        })
     })
 
     const options = [
@@ -168,8 +218,9 @@ export const PostCreate = () => {
                         (p) => (
                             <form className="form" onSubmit={p.handleSubmit}>
                                 <div className="title">New Post</div>
-                                {state.loading ? <div>Loading...</div> : null}
-                                {state.success ? <div>Data has been successfully saved...</div> : null}
+                                {state.loading ? <Alert type="info" message="Saving..."/> : null}
+                                {state.success ? <Alert type="success" message="Data has been successful saved."/> : null}
+                                {state.error ? <Alert type="error" message="Theres an error with the server please try to refresh your browser."/>: null}
                                 <div className="input">
                                     Title
                                     <input type="text" name="title"
@@ -223,12 +274,18 @@ export const PostCreate = () => {
                                     Thumbnail (Optional)
                                     <input style={{border:'1px solid #fff'}}
                                            type="file"
+                                           ref={thumbnailInputRef}
                                            name="thumbnail"
-                                           onChange={(event) => {
-                                               p.setFieldValue("thumbnail", event.currentTarget.files[0]);
+                                           onBlur={p.handleBlur}
+                                           onChange={e => {
+                                               if(e.target.value !== ''){
+                                                   p.setFieldValue("thumbnail", e.currentTarget.files[0])
+                                               }else{
+                                                   p.setFieldValue("thumbnail", null)
+                                               }
                                            }}
                                     />
-                                    {p.errors.thumbnail ?
+                                    {p.touched.thumbnail && p.errors.thumbnail ?
                                         (<div className="input-error">{p.errors.thumbnail}</div>) : null}
                                 </div>
                                 <div className="post-checkbox input">
@@ -247,15 +304,11 @@ export const PostCreate = () => {
                                         />
                                     </div>
                                 </div>
-                                {
-                                    state.error ? <div className="input-error">Somethings wrong with your data.</div>
-                                        : null
-                                }
                                 <div>
                                     {state.loading ?
                                         <button className="button" disabled>Loading....</button>
                                         :
-                                        <button type="submit" className="button">
+                                        <button  type="submit" className="button">
                                             Confirm</button>
                                     }
                                 </div>

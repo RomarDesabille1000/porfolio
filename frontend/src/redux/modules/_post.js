@@ -18,19 +18,21 @@ const initialState = {
     loading:false,
     error: false,
     success: false,
-    data: []
+    data: {
+        results: []
+    },
 }
 
 export default function post(state = initialState, {type, payload}){
     switch (type){
         case LOADING:
-            return {...state, loading: true}
+            return {...state, loading: true, success: false, error: false}
         case LOADED:
             return {...state, loading: false}
         case CREATE_POST:
-            return {...state, data: payload, error: false, success: true}
+            return {...state, response: payload, error: false, success: true}
         case GET_POSTS:
-            return {...state, data: payload, error: false, success: true}
+            return {...state, data: payload, error: false}
         case ERROR:
             return {...state, error: payload}
         default:
@@ -42,7 +44,7 @@ export default function post(state = initialState, {type, payload}){
  *    Action Creators
  *    Padulong sa Reducer
  */
-export const create_post = (formData) => {
+export const createPost = (formData) => {
     return async (dispatch) => {
         dispatch({
             type: LOADING
@@ -65,12 +67,12 @@ export const create_post = (formData) => {
     }
 }
 
-export const get_post = () => {
+export const getPost = (currentPage = 1, pageItems = 5) => {
     return async (dispatch) => {
         dispatch({
             type: LOADING
         })
-        await axiosInstance.get('blog/post/lists/')
+        await axiosInstance.get(`blog/post/lists/${pageItems}/?page=${currentPage}`)
             .then((response) => {
                 dispatch({
                     type: GET_POSTS,

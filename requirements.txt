@@ -1,4 +1,6 @@
 Django
-djangorestframework==3.12.4
+djangorestframework
 Pillow
-django-ckeditor==6.1.0
+django-ckeditor
+django-cors-headers
+django-rest-auth

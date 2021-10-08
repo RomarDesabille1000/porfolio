@@ -1,9 +1,12 @@
+import {useState} from "react";
+import {useSelector} from "react-redux";
 
 const Dashboard = ({ changeTheme, themeSelected }) => {
+    const authState = useSelector(state => state.auth)
 
     return(
         <div id="content">
-            <div style={{marginTop:65, marginBottom:10}}>
+            <div style={{marginBottom:10}}>
                 Choose your Theme
             </div>
             <div style={{marginBottom:10}}>
@@ -28,7 +31,7 @@ const Dashboard = ({ changeTheme, themeSelected }) => {
                         <label>Light Mode</label>
                 </span>
             </div>
-            Hello! John Doe
+            Hello! {authState.userData.name}
         </div>
     )
 }

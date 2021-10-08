@@ -1,9 +1,13 @@
 from django.contrib import admin
+from django.forms import forms
+
 from .models import *
 
 # Register your models here.
 class CategoryAdmin(admin.ModelAdmin):
-    fields = ('title', )
+    fields = ('title', 'user')
+    list_display = ('id', 'title', 'user', )
+
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'status', 'created_on')

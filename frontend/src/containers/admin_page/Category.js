@@ -3,8 +3,10 @@ import Search from "../../components/Search";
 import {Formik, useFormik} from "formik";
 import * as Yup from 'yup'
 import {useDispatch, useSelector} from "react-redux";
-import {create_category, get_category} from "../../redux/modules/_category";
-import {useEffect} from "react";
+import {create_category, getCategory, deleteCategory} from "../../redux/modules/_category";
+import {useEffect, useState} from "react";
+import {Pagination} from "../../components/Pagination";
+import Alert from "../../components/Alert";
 
 const SubMenu = () => (
     <div id="header" className="sub-menu">
@@ -18,15 +20,40 @@ const SubMenu = () => (
 )
 //Category Lists
 export const Category = () => {
-
     const state = useSelector(state => state.category)
     const dispatch = useDispatch()
+    const [pagination, setPagination] = useState({
+        page: 1,
+        pageSize: 2,
+    })
+
+
+    //---------------------DELETE CATEGORY-------------------------------------
+    const [stateDeleteCategory, setSateDeleteCategory] = useState({
+        id: null,
+        delete: false
+    })
+    const handleOnClickDelete = (e) => {
+        setSateDeleteCategory({id: e.target.id, delete: true})
+    }
+    const handleOnClickCancel = () => {
+        setSateDeleteCategory({id: null, delete: false})
+    }
+    const handleOnClickConfirm = () => {
+        let page = pagination.page
+        if(state.data.results.length === 1 && state.data.next === null){
+            //Go back to page 1
+            page = 1
+            setPagination({ ...pagination, page: 1 })
+        }
+        dispatch(deleteCategory(stateDeleteCategory.id, pagination.pageSize, page))
+        setSateDeleteCategory({id: null, delete: false})
+    }
+    //---------------------DELETE CATEGORY-------------------------------------
 
     useEffect(() => {
-        dispatch(get_category())
+        dispatch(getCategory(pagination.page, pagination.pageSize))
     }, [])
-
-    console.log(state)
 
 
     return(
@@ -35,26 +62,60 @@ export const Category = () => {
             <div id="content">
                 <Search title="Category"/>
                 <section id="projects">
-                    {state.loading ? 'loading...': null}
-                    {state.error ? 'Somethings wrong': null}
                     {
-                        state.data.map((data, index) => {
-                            return(
-                                <div key={index} className="lists-admin">
-                                    <ul className="post-list">
-                                        <li className="post-item">
-                                            <span className="link">
-                                                {data.title}
-                                            </span>
-                                        </li>
-                                    </ul>
-                                    <div>
-                                        <button style={{marginRight:10}}>Update</button>
-                                        <button>Delete</button>
-                                    </div>
-                                </div>
-                            )
-                        })
+                        state.response ?
+                            <Alert type={state.response['status']} message={state.response['message']}/> : ''
+                    }
+                    {state.loading.status ?
+                        <div className="loading">
+                            <div className="loader"/>
+                            <div className="text-info">{state.loading.info}</div>
+                        </div>
+                        :
+                        (
+                            !state.data.results.length > 0 ? '' :
+                                state.data.results.map((data, index) => {
+                                    return(
+                                        <div key={index}>
+                                            <div className="lists-admin">
+                                                <ul className="post-list">
+                                                    <li className="post-item">
+                                                        <span>ID: {data.id}</span>
+                                                        &nbsp;
+                                                        <span className="customized-text">{data.title}</span>
+                                                    </li>
+                                                </ul>
+                                                <div>
+                                                    <button className="update">Update</button>
+                                                    <button
+                                                        id={data.id}
+                                                        onClick={handleOnClickDelete}
+                                                        className="delete">Delete</button>
+                                                </div>
+                                            </div>
+                                            {
+                                                data.id === Number(stateDeleteCategory.id) && stateDeleteCategory.delete ?
+                                                    <div className="option">
+                                                        <div>Are you sure You want to delete this category of Id: {data.id} ?</div>
+                                                        <div>
+                                                            <button onClick={handleOnClickConfirm}
+                                                                    className="confirm">Confirm</button>
+                                                            <button
+                                                                onClick={handleOnClickCancel}
+                                                                className="update">Cancel</button>
+                                                        </div>
+                                                    </div> : null
+                                            }
+                                        </div>
+                                    )
+                                })
+                        )
+                    }
+                    {
+                        state.data.results.length > 0 ?
+                            <Pagination data={state.data} dispatchFunc={getCategory}
+                                        page={pagination} setPage={setPagination}/>
+                            : ''
                     }
                 </section>
             </div>

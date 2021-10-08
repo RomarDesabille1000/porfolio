@@ -1,17 +1,15 @@
 import {Redirect} from 'react-router-dom'
 
-const IsUserAuthenticated = (Component, isLogin) => {
-    const f = () => {
-        if(!isLogin){
-            return <Redirect to="/" />
-        }
+const IsUserAuthenticated = (Component, auth) => {
+
+    const redirectIfNotAuth = () => {
+        return !auth ? <Redirect to="/admin/"/> : ''
     }
 
     return (props) => (
-        <div>
-            {f()}
-            <Component {...props}/>
-        </div>
+        <>
+            { !auth ? <Redirect to="/admin/"/> : <Component {...props}/> }
+        </>
     )
 }
 

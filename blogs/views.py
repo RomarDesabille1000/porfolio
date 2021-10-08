@@ -1,5 +1,7 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import *
 
@@ -22,11 +24,15 @@ def post_search(request, title):
     serializer = PostSerializer(instance=post, many=True)
     return Response(serializer.data)
 
-@api_view(['GET', ])
-def post_list(request):
+@api_view(['GET'], )
+def post_list(request, page_items):
+    page_size = page_items
+    paginator = PageNumberPagination()
+    paginator.page_size = page_size
     post = Post.objects.all()
-    serializer = PostSerializer(instance=post, many=True)
-    return Response(serializer.data)
+    result_page = paginator.paginate_queryset(post, request)
+    serializer = PostSerializer(result_page, many=True)
+    return paginator.get_paginated_response(serializer.data)
 
 
 @api_view(['POST', ])
@@ -62,13 +68,17 @@ def post_delete(request, slug):
         data['failed'] = "Delete Failed."
     return Response(data=data)
 
+
 # Category
 @api_view(['GET', ])
-def category_list(request):
-    category = Category.objects.all()
-    serializer = CategorySerializer(instance=category, many=True)
-    return Response(serializer.data)
-
+@permission_classes([IsAuthenticated])
+def category_list(request, page_size):
+    categories = Category.objects.filter(user=request.user.id)
+    paginator = PageNumberPagination()
+    paginator.page_size = page_size
+    result_page = paginator.paginate_queryset(categories, request)
+    serializer = CategorySerializer(result_page, many=True)
+    return paginator.get_paginated_response(serializer.data)
 
 @api_view(['POST', ])
 def category_create(request):
@@ -80,7 +90,7 @@ def category_create(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT', ])
-def post_update(request, id):
+def category_update(request, id):
     category = Category.objects.get(pk=id)
     serializer = CategorySerializer(category, data=request.data)
     data = {}
@@ -92,12 +102,21 @@ def post_update(request, id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE', ])
-def post_delete(request, id):
-    category = Category.objects.get(pk=id)
+@permission_classes([IsAuthenticated])
+def category_delete(request, id, page_size):
+    try:
+        category = Category.objects.get(pk=id, user=request.user.id)
+    except Category.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     operation = category.delete()
-    data = {}
     if operation:
-        data['success'] = "Category has been deleted sucessfully."
+        categories = Category.objects.filter(user=request.user.id)
+        paginator = PageNumberPagination()
+        paginator.page_size = page_size
+        result_page = paginator.paginate_queryset(categories, request)
+        serializer = CategorySerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     else:
-        data['failed'] = "Delete Failed."
-    return Response(data=data)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+

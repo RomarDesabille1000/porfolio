@@ -18,8 +18,8 @@ const NavbarLayout = ({children}) => {
                             <i className="fas fa-bars fa-2x" aria-hidden="true"/>
                         </li>
                         <li><NavLink exact to="/" activeClassName="active">Home</NavLink></li>
-                        <li><NavLink exact to="/blog" activeClassName="active">Blog</NavLink></li>
-                        <li><NavLink exact to="/about" activeClassName="active">About</NavLink></li>
+                        <li><NavLink exact to="/blog/" activeClassName="active">Blog</NavLink></li>
+                        <li><NavLink exact to="/about/" activeClassName="active">About</NavLink></li>
                     </ul>
                 </div>
             </header>
