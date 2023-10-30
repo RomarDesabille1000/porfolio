@@ -3,7 +3,6 @@ import axiosInstance from "../../axios";
 const GET_CATEGORY = "GET_CATEGORY"
 const CREATE_CATEGORY = "CREATE_CATEGORY"
 const DELETE_CATEGORY = "DELETE_CATEGORY"
-const EDIT_CATEGORY = "EDIT_CATEGORY"
 const LOADING = "LOADING"
 const LOADED = "LOADED"
 const ERROR = "ERROR"

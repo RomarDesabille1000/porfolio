@@ -1,14 +1,12 @@
 import {Formik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
-import {login, userData} from "../../redux/modules/_auth";
+import {login} from "../../redux/modules/_auth";
 import Alert from "../../components/Alert";
-import {Redirect, useHistory} from "react-router-dom";
 import {useEffect} from "react";
 
 const Login = () => {
     const authState = useSelector(state => state.auth)
     const dispatch = useDispatch()
-    const history = useHistory()
 
     const initialValues = {
         email: 'romar@gmail.com',

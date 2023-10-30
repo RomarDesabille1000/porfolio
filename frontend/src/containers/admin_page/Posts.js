@@ -24,7 +24,7 @@ const SubMenu = () => (
 
 //Multiple Select
 export function MultipleSelectField(props) {
-    const [field, state, { setValue, setTouched }] = useField(props.field.name);
+    const [, state, { setValue, setTouched }] = useField(props.field.name);
 
     // value is an array now
     const onChange = (value) => {

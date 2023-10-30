@@ -2,8 +2,6 @@ import axiosInstance from "../../axios";
 //Actions
 const GET_POSTS = "GET_POSTS"
 const CREATE_POST = "CREATE_POST"
-const DELETE_POST = "DELETE_POST"
-const EDIT_POST = "EDIT_POST"
 const LOADING = "LOADING"
 const LOADED = "LOADED"
 const ERROR = "ERROR"
