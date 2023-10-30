@@ -1,6 +1,6 @@
 import {NavLink} from "react-router-dom";
 import Search from "../../components/Search";
-import {Formik, useFormik} from "formik";
+import {Formik} from "formik";
 import * as Yup from 'yup'
 import {useDispatch, useSelector} from "react-redux";
 import {create_category, getCategory, deleteCategory} from "../../redux/modules/_category";
